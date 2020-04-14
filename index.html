@@ -1,0 +1,622 @@
+<html>
+<head>
+<meta charset='utf-8' />
+<title>Significant Earthquakes, 1965-2016</title>
+<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+<script src='https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.js'></script>
+<link href='https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.css' rel='stylesheet' />
+
+<style>
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Helvetica Neue', Helvetica, Arial, Sans-serif;
+}
+
+#map {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+}
+
+h1 {
+  font-size: 20px;
+  line-height: 30px;
+}
+
+
+h2 {
+  font-size: 14px;
+  line-height: 20px;
+  margin-bottom: 10px;
+}
+
+a {
+  text-decoration: none;
+  color: #1f9e89;
+}
+
+label {
+    cursor: default;
+}
+
+#console {
+  position: absolute;
+  width: 240px;
+  margin: 10px;
+  padding: 10px 20px;
+  background-color: white;
+}
+
+.session {
+  margin-bottom: 20px;
+}
+
+.row {
+  height: 12px;
+  width: 100%;
+}
+
+.magnitude-session {
+  margin-bottom: 120px;
+}
+
+.colors {
+  background: linear-gradient(to right, #1f9e89, #26828e, #31678e, #3e4a89, #482878, #430154);
+  margin-bottom: 5px;
+}
+
+.label {
+  width: 15%;
+  display: inline-block;
+  text-align: center;
+}
+
+.CDB-Legend-item {
+	height: 100%;
+}
+
+.u-tSpace-xl {
+	margin-top: 12px;
+}	
+
+.u-clearfix:after {
+    display: table;
+    clear: both;
+    content: "";
+}
+
+ol, ul {
+	list-style: none;
+	padding-inline-start: 0px;
+}
+
+.Bubble-container {
+    position: relative;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100px;
+    margin: 16px 0 10px;
+}
+
+.Bubble-item, .Bubble-list {
+    width: 100%;
+    height: 100px;
+}
+
+.Bubble-item {
+	position: absolute;
+}
+
+.Bubble-label {
+    position: absolute;
+    bottom: 0;
+    height: 1px;
+    width: calc(100% - 50px);
+}
+
+.Bubble-label:after {
+    position: absolute;
+    top: -1px;
+    left: 25;
+    width: 85%;
+    height: 1px;
+    background: rgba(0, 0, 0, 0.08);
+    content: "";
+/*	    z-index: -1;
+*/	    display: inline-block;
+}
+
+.CDB-Size-small {
+    font-size: 14;
+    line-height: 16px;
+}
+
+.CDB-Text {
+	font-family: Helvetica;
+}
+
+.u-altTextColor {
+    color: #979ea1;
+}
+
+.magnitude-labels{
+	width: 18.5%;
+  	display: table-row;
+  	text-align: left;
+	font-family: Helvetica;
+	font-size: 14;
+    line-height: 25px;
+}
+
+.Bubble-numbersItem {
+    display: inline-block;
+    padding-right: 5px;
+    transform: translate3d(0,-50%,0);
+    background: hsla(0,0%,100%,.8);
+}
+
+.Bubble-circle {
+    opacity: .5;
+    filter: alpha(opacity=50);
+    position: absolute;
+    right: 0;
+    width: 100px;
+    height: 100%;
+}
+
+.Bubble-itemCircle {
+    display: block;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    transform: translate3d(-50%,0,0);
+    border: 1px solid rgba(0,0,0,.1);
+    border-radius: 50%;
+    background: #1f9e89;
+    box-shadow: -1px 0 2px 0 rgba(0,0,0,.1);
+    pointer-events: none;
+}
+
+.Bubble-average {
+    -webkit-transform: translateY(50%);
+    -khtml-transform: translateY(50%);
+    -moz-transform: translateY(50%);
+    -ms-transform: translateY(50%);
+    -o-transform: translateY(50%);
+    transform: translateY(50%);
+    display: block;
+    position: absolute;
+    right: 102px;
+    white-space: nowrap;
+    z-index: 1000;
+}
+
+.Bubble-average:before {
+    top: calc(50% - 1px);
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: rgba(0,0,0,.4);
+}
+
+.Bubble-average:after, .Bubble-average:before {
+    display: block;
+    position: absolute;
+    right: -54px;
+    content: "";
+    z-index: 10;
+}
+
+.Bubble-average:after {
+    top: 50%;
+    width: 51px;
+    height: 1px;
+    border-top: 1px dotted rgba(0,0,0,.4);
+}
+
+/*.map-overlay {
+    font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: 0;
+    padding: 10px;
+}
+
+.map-overlay .map-overlay-inner {
+    background-color: #fff;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+    padding: 10px;
+    margin-bottom: 10px;
+}*/
+
+.session input {
+/*    background-color: transparent;
+*/	display: inline-block;
+    width: 100%;
+    position: relative;
+    margin: 0;
+    /*cursor: ew-resize;*/
+}
+
+
+</style>
+</head>
+
+<body>
+<div id='map'></div>
+<div id='console'>
+  <h1>Significant Earthquakes, 1965-2016</h1>
+  <p>Created by Maggie Zhang for DSGN 337, Spring 2020</p>
+  <p>Data: <a href='https://www.kaggle.com/usgs/earthquake-database'>Date, time, and location of all earthquakes with magnitude of 5.5 or higher</a> from 1965-2016</p>
+
+  <div class='session'>
+  <h2>Depth (m)</h2>
+  <div class='row colors'>
+  </div>
+  <div class='row labels'>
+    <div class='label'>0</div>
+    <div class='label'>150</div>
+    <div class='label'>300</div>
+    <div class='label'>450</div>
+    <div class='label'>600</div>
+    <div class='label'>750</div>
+  </div>
+  </div>
+
+<div class="CBD-Legend-item u-tSpace-xl u-clearfix" style='display: block;'>
+	<h2>Magnitude (ml)</h2>
+	<div class ="Bubble-container">
+		<ul class="Bubble-list">
+			<li class="Bubble-item">
+				<div class="Bubble-label CDB-Text CDB-Size-small" style="height: 100%">
+					<div class="Bubble-numbersItem CDB-Text CDB-Size-small">9.5</div>
+				</div>
+				<div class = "Bubble-circle">
+					<span class="Bubble-itemCircle" style="height:100%; width:100%; opacity:1; background color:#1f9e89">
+					</span>
+				</div>
+			</li>
+			<li class = "Bubble-item">
+				<div class = "Bubble-label CDB-Text CDB-Size-small" style="height: 79%">
+					<div class="Bubble-numbersItem CDB-Text CDB-Size-small">8.5</div>
+				</div>
+				<div class = "Bubble-circle">
+					<span class="Bubble-itemCircle" style="height:79%; width:79%; opacity:1; background color:#1f9e89"></span>
+				</div>
+			</li>
+			<li class = "Bubble-item">
+				<div class = "Bubble-label CDB-Text CDB-Size-small" style="height: 59%">
+					<div class="Bubble-numbersItem CDB-Text CDB-Size-small">7.5</div>
+				</div>
+				<div class = "Bubble-circle">
+					<span class="Bubble-itemCircle" style="height:59%; width:59%; opacity:1; background color:#1f9e89"></span>
+				</div>
+			</li>
+			<li class = "Bubble-item">
+				<div class = "Bubble-label CDB-Text CDB-Size-small" style="height: 39%">
+					<div class="Bubble-numbersItem CDB-Text CDB-Size-small">6.5</div>
+				</div>
+				<div class = "Bubble-circle">
+					<span class="Bubble-itemCircle" style="height:39%; width:39%; opacity:1; background color:#1f9e89"></span>
+				</div>
+			</li>
+			<li class = "Bubble-item">
+				<div class = "Bubble-label CDB-Text CDB-Size-small" style="height: 19%">
+					<div class="Bubble-numbersItem CDB-Text CDB-Size-small">5.5</div>
+				</div>
+				<div class = "Bubble-circle">
+					<span class="Bubble-itemCircle" style="height:19%; width:19%; opacity:1; background color:#1f9e89"></span>
+				</div>
+			</li>
+		</ul>
+		<p class="Bubble-average CDB-Text CDB-Size-small u-altTextColor" style="bottom: 15%">AVG: 5.88</p>
+	</div>
+</div>
+<!-- <div class="map-overlay-inner"> -->
+ 	<div class="session" id="sliderbar">
+		<h2>Filter by Year: <label id = 'year'>1965</label></h2>
+		<input id = "slider" type="range" min="0" max="51" step="1" value="0">
+	</div>
+<!-- </div> -->
+<div class="magnitude-session">
+	<h2>Filter by Magnitude</h2>
+	<div class="row" id="filters">
+		<div class='magnitude-labels'><input id="All" type="radio" name="toggle" value="All" checked="checked">
+		All</div>
+		<div class='magnitude-labels'><input id="5.5-6.0" type="radio" name="toggle" value="5.5-6.0">
+		Moderate (5.5 - 6.0)</div>
+		<div class='magnitude-labels'><input id="6.1-7.0" type="radio" name="toggle" value="6.1-7.0">
+		Strong (6.1 - 7.0)</div>
+		<div class='magnitude-labels'><input id="7.1-8.0" type="radio" name="toggle" value="7.1-8.0">
+		Major (7.1 - 8.0)</div>
+		<div class='magnitude-labels'><input id="8.1 and above" type="radio" name="toggle" value="8.1 and above">
+		Great (8.1 and above)</div>
+	</div>
+</div>
+
+<!-- <div class="magnitude-session">
+	<h2>Filter by Depth</h2>
+	<div class="row" id="filters">
+		<div class='magnitude-labels'><input id="Alld" type="radio" name="toggle" value="Alld" checked="checked">
+		All</div>
+		<div class='magnitude-labels'><input id="shallow" type="radio" name="toggle" value="shallow">
+		Shallow (0 - 70 km)</div>
+		<div class='magnitude-labels'><input id="6.1-7.0" type="radio" name="toggle" value="6.1-7.0">
+		Intermediate (71 - 300 km)</div>
+		<div class='magnitude-labels'><input id="7.1-8.0" type="radio" name="toggle" value="7.1-8.0">
+		Deep (300 - 700 km)</div>
+	</div>
+</div> -->
+
+</div>
+
+<script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
+
+ <script>
+mapboxgl.accessToken = 'pk.eyJ1IjoibWFnZ2llemlnemFnIiwiYSI6ImNrOG5qZWZ4YTB6MXMzc253azA4eHA4MmsifQ.OozXguWjag-EZO4FqwusOA';
+
+var map = new mapboxgl.Map({
+  container: 'map', // container element id
+  style: 'mapbox://styles/mapbox/light-v10',
+  center: [-74.0059, 40.7128], // initial map center in [lon, lat]
+  zoom: 2
+});
+
+var years = [
+	'1965',
+	'1966',
+	'1967',
+	'1968',
+	'1969',
+	'1970',
+	'1971',
+	'1972',
+	'1973',
+	'1974',
+	'1975',
+	'1976',
+	'1977',
+	'1978',
+	'1979',
+	'1980',
+	'1981',
+	'1982',
+	'1983',
+	'1984',
+	'1985',
+	'1986',
+	'1987',
+	'1988',
+	'1989',
+	'1990',
+	'1991',
+	'1992',
+	'1993',
+	'1994',
+	'1995',
+	'1996',
+	'1997',
+	'1998',
+	'1999',
+	'2000',
+	'2001',
+	'2002',
+	'2003',
+	'2004',
+	'2005',
+	'2006',
+	'2007',
+	'2008',
+	'2009',
+	'2010',
+	'2011',
+	'2012',
+	'2013',
+	'2014',
+	'2015',
+	'2016'
+];
+
+function filterBy(year) {
+	var filters = ['==', 'year', year+65];
+	map.setFilter('earthquakes', filters);
+	map.setFilter('earthquake-labels', filters);
+ 
+	// Set the label to the year
+	document.getElementById('year').textContent = years[year];
+}
+
+map.on('style.load', function() {
+
+	map.addSource('plates',{
+		'type':'geojson',
+		data: './plates.geojson'
+	})
+	map.addSource('volcano',{
+		'type':'geojson',
+		data: './volcano.geojson'
+	})
+
+	map.addLayer({
+        id: 'plates',
+        type: 'line',
+        source: 'plates',
+        layout: {},
+        paint: {
+            'line-color': "rgba(0,0,0,0.5)",
+            'line-dasharray': [4,2]
+        }
+    });
+
+    map.addLayer({
+        id: "volcano",
+        type: "symbol",
+        // interactive: true,
+        source: "volcano",
+        properties:{
+        	'marker-color': '#3bb2d0',
+      		'marker-size': 'large',
+      		'marker-symbol': 'volcano'
+        }
+        // layout: {
+        //     'icon-image': "volcano-15",
+        //     'icon-padding': 2,
+        //     'icon-size': {
+        //         base: 1,
+        //         stops: [
+        //             [8, 0.7],
+        //             [16, 2]
+        //             ]
+        //     }
+        // },
+        // paint:{
+        //   "icon-opacity": {
+        //       "base": 1,
+        //       "stops": [
+        //           [1, 0.85],
+        //           [8, 1]
+        //           ]
+        //   }
+        // }
+    });
+
+	d3.json('./earthquakes.geojson',
+		function(err, data){
+			if (err) throw err;
+			data.features = data.features.map(function(d){
+				d.properties.year = new Date(d.properties.Date).getYear();
+				d.properties.magnitude = d.properties.Magnitude
+				return d;
+			});
+	map.addSource('earthquakes',{
+		'type':'geojson',
+		data: data
+	});
+
+    map.addLayer({
+	    id: 'earthquakes',
+	    type: 'circle',
+	    source: 'earthquakes',
+	    paint: {
+	      'circle-radius': [
+	        'interpolate',
+	        ['linear'],
+	        ['number', ['get', 'Magnitude']],
+	        5.5, 10,
+	        6.5, 20,
+	        7.5, 30,
+	        8.5, 40,
+	        9.5, 50,
+	      ],
+	      'circle-color': [
+	        'interpolate',
+	        ['linear'],
+	        ['number', ['get', 'Depth']],
+	        0, '#1f9e89',
+	        150, '#26828e',
+	        300, '#31678e',
+	        450, '#3e4a89',
+	        600, '#482878',
+	        750, '#430154',
+	      ],
+	      'circle-opacity': 0.2
+	    }
+	  	});
+
+    map.addLayer({
+		'id': 'earthquake-labels',
+		'type': 'symbol',
+		'source': 'earthquakes',
+		'layout': {
+		'text-field': ['concat',['to-string', ['get', 'Magnitude']],'ml, ', ['to-string', ['get', 'Depth']], 'm'],
+		'text-font': [
+		'Open Sans Bold',
+		'Arial Unicode MS Bold'
+		],
+		'text-size': 12
+		},
+		'paint': {
+		'text-color': 'rgba(0,0,0,0.5)'
+		}
+  	});
+  	filterBy(0);
+
+
+    document
+		.getElementById('slider')
+		.addEventListener('input', function(e) {
+			var year = parseInt(e.target.value, 10);
+			filterBy(year);
+	});
+
+	document
+		.getElementById('filters')
+		.addEventListener('change', function(e) {
+			var magnitude = e.target.value;
+		// update the map filter
+		if (magnitude === 'All') {
+			map.setFilter('earthquakes', ['in', ['get', 'magnitude'], ['literal', [5.5, 5.7, 5.8, 5.9, 6.0, 6.1, 6.2, 6.3, 6.4, 6.5, 6.6, 6.7, 6.8, 6.9, 7.0, 7.1, 7.2, 7.3, 7.4, 7.5, 7.6, 7.7, 7.8, 7.9, 8.0, 8.1, 8.2, 8.3, 8.4, 8.5, 8.6, 8.7, 8.8, 8.9, 9.0, 9.1, 9.2, 9.3, 9.4]]]);
+			map.setFilter('earthquake-labels', ['in', ['get', 'magnitude'], ['literal', [5.5, 5.7, 5.8, 5.9, 6.0, 6.1, 6.2, 6.3, 6.4, 6.5, 6.6, 6.7, 6.8, 6.9, 7.0, 7.1, 7.2, 7.3, 7.4, 7.5, 7.6, 7.7, 7.8, 7.9, 8.0, 8.1, 8.2, 8.3, 8.4, 8.5, 8.6, 8.7, 8.8, 8.9, 9.0, 9.1, 9.2, 9.3, 9.4]]]);
+		} else if (magnitude === '5.5-6.0') {
+			map.setFilter('earthquakes', ['in', ['get', 'magnitude'], ['literal', [5.5, 5.7, 5.8, 5.9, 6.0]]]);
+			map.setFilter('earthquake-labels', ['in', ['get', 'magnitude'], ['literal', [5.5, 5.7, 5.8, 5.9, 6.0]]]);
+		} else if (magnitude === '6.1-7.0') {
+			map.setFilter('earthquakes', ['in', ['get', 'magnitude'], ['literal', [6.1, 6.2, 6.3, 6.4, 6.5, 6.6, 6.7, 6.8, 6.9, 7.0]]]);
+			map.setFilter('earthquake-labels', ['in', ['get', 'magnitude'], ['literal', [6.5, 6.6, 6.7, 6.8, 6.9, 7.0]]]);
+		} else if (magnitude === '7.1-8.0') {
+			map.setFilter('earthquakes', ['in', ['get', 'magnitude'], ['literal', [7.1, 7.2, 7.3, 7.4, 7.5, 7.6, 7.7, 7.8, 7.9, 8.0]]]);
+			map.setFilter('earthquake-labels', ['in', ['get', 'magnitude'], ['literal', [7.1, 7.2, 7.3, 7.4, 7.5, 7.6, 7.7, 7.8, 7.9, 8.0]]]);
+		} else if (magnitude === '8.1 and above') {
+			map.setFilter('earthquakes', ['in', ['get', 'magnitude'], ['literal', [8.1, 8.2, 8.3, 8.4, 8.5, 8.6, 8.7, 8.8, 9.1]]]);
+			map.setFilter('earthquake-labels', ['in', ['get', 'magnitude'], ['literal', [8.1, 8.2, 8.3, 8.4, 8.5, 8.6, 8.7, 8.8, 9.1]]]);
+		} 
+		else {
+		console.log('error');
+		}
+	});
+
+	// document
+	// 	.getElementById('filters')
+	// 	.addEventListener('change', function(e) {
+	// 		var depth = e.target.value;
+	// 	// update the map filter
+	// 	if (depth === 'Alld') {
+	// 		map.setFilter('earthquakes', ['in', ['get', 'magnitude'], ['literal', [>= -1.1]]]);
+	// 		map.setFilter('earthquake-labels', ['in', ['get', 'magnitude'], ['literal', [5.5, 5.7, 5.8, 5.9, 6.0, 6.1, 6.2, 6.3, 6.4, 6.5, 6.6, 6.7, 6.8, 6.9, 7.0, 7.1, 7.2, 7.3, 7.4, 7.5, 7.6, 7.7, 7.8, 7.9, 8.0, 8.1, 8.2, 8.3, 8.4, 8.5, 8.6, 8.7, 8.8, 8.9, 9.0, 9.1, 9.2, 9.3, 9.4]]]);
+	// 	} else if (magnitude === '5.5-6.0') {
+	// 		map.setFilter('earthquakes', ['in', ['get', 'magnitude'], ['literal', [5.5, 5.7, 5.8, 5.9, 6.0]]]);
+	// 		map.setFilter('earthquake-labels', ['in', ['get', 'magnitude'], ['literal', [5.5, 5.7, 5.8, 5.9, 6.0]]]);
+	// 	} else if (magnitude === '6.1-7.0') {
+	// 		map.setFilter('earthquakes', ['in', ['get', 'magnitude'], ['literal', [6.1, 6.2, 6.3, 6.4, 6.5, 6.6, 6.7, 6.8, 6.9, 7.0]]]);
+	// 		map.setFilter('earthquake-labels', ['in', ['get', 'magnitude'], ['literal', [6.5, 6.6, 6.7, 6.8, 6.9, 7.0]]]);
+	// 	} else if (magnitude === '7.1-8.0') {
+	// 		map.setFilter('earthquakes', ['in', ['get', 'magnitude'], ['literal', [7.1, 7.2, 7.3, 7.4, 7.5, 7.6, 7.7, 7.8, 7.9, 8.0]]]);
+	// 		map.setFilter('earthquake-labels', ['in', ['get', 'magnitude'], ['literal', [7.1, 7.2, 7.3, 7.4, 7.5, 7.6, 7.7, 7.8, 7.9, 8.0]]]);
+	// 	} else if (magnitude === '8.1 and above') {
+	// 		map.setFilter('earthquakes', ['in', ['get', 'magnitude'], ['literal', [8.1, 8.2, 8.3, 8.4, 8.5, 8.6, 8.7, 8.8, 9.1]]]);
+	// 		map.setFilter('earthquake-labels', ['in', ['get', 'magnitude'], ['literal', [8.1, 8.2, 8.3, 8.4, 8.5, 8.6, 8.7, 8.8, 9.1]]]);
+	// 	} 
+	// 	else {
+	// 	console.log('error');
+	// 	}
+	// });
+	
+	}
+	);
+
+});
+
+</script>
+<!-- <script src='./volcano.geojson'></script>
+<script src='./plates.geojson'></script> -->
+</body>
+
+
+</html>

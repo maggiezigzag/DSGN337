@@ -496,10 +496,11 @@ map.on('style.load', function() {
 				d.properties.magnitude = d.properties.Magnitude
 				d.properties.latitude = d.properties.Latitude
 				d.properties.longitude = d.properties.Longitude
-				console.log(d.properties.latitude)
 				d.properties.depth = d.properties.Depth
 				return d;
 			});
+	console.log(d.properties.latitude)
+
 	map.addSource('earthquakes',{
 		'type':'geojson',
 		data: data

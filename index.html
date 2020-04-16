@@ -493,6 +493,8 @@ map.on('style.load', function() {
 			data.features = data.features.map(function(d){
 				d.properties.year = new Date(d.properties.Date).getYear();
 				d.properties.magnitude = d.properties.Magnitude
+				d.properties.location = d.properties.Location
+				d.properties.depth = d.properties.Depth
 				return d;
 			});
 	map.addSource('earthquakes',{
@@ -640,7 +642,7 @@ var geocoder = new MapboxGeocoder({
 map.addControl(geocoder);
 
 geocoder.mapboxClient.reverseGeocode({
-	  query: [-95.4431142, 33.6875431]
+	  query: d.properties.location
 	})
 	  .send()
 	  .then(response => {

@@ -553,6 +553,32 @@ map.on('style.load', function() {
   	});
   	filterBy(0);
 
+  	function getReverseGeocode(feature) {
+    var lat = feature.geometry.coordinates[0];
+    var lng = feature.geometry.coordinates[1];
+    var url = "https://api.mapbox.com/geocoding/v5/mapbox.places/" + lat + "," + lng + ".json?access_token=" + mapboxgl.accessToken;
+    $.get(url, function(data){
+        var myData = data;
+        doAThing(data);
+    });
+    function doAThing(data){
+        // Populate the popup and set its coordinates
+        // based on the feature found.
+        var popup = new mapboxgl.Popup()
+            .setLngLat(feature.geometry.coordinates)
+            .setHTML(makeHtml(data))
+            .addTo(map);
+    }
+
+    function makeHtml(data) {
+        var feature = data.features[0];
+        var name = feature.text;
+        var type = feature.type;
+
+        var formattedHtml = "<strong>" + name + "</strong><br>" + type;
+        return formattedHtml;
+    }
+}
 
   	map.on('click', function(e) {
 		var features = map.queryRenderedFeatures(e.point, {
@@ -564,10 +590,11 @@ map.on('style.load', function() {
 	}
 
 	var feature = features[0];
+	getReverseGeocode(feature);
 
-	var geocoder = new MapboxGeocoder({
-		accessToken: mapboxgl.accessToken
-	});
+	// var geocoder = new MapboxGeocoder({
+	// 	accessToken: mapboxgl.accessToken
+	// });
 
 	// geocoder.mapboxClient.reverseGeocode({
 	// 	query: feature.geometry.coordinates
@@ -578,10 +605,10 @@ map.on('style.load', function() {
 	//     const match = response.body;
 	// });
 
-	var popup = new mapboxgl.Popup({ offset: [0, -15] })
-	    .setLngLat(feature.geometry.coordinates)
-	    .setHTML('<p>' + 'Magnitude: ' + feature.properties.magnitude + '</p><p>' + 'Year: ' + feature.properties.year + '</p>' + '<p>' + '</p>')
-	    .addTo(map);
+	// var popup = new mapboxgl.Popup({ offset: [0, -15] })
+	//     .setLngLat(feature.geometry.coordinates)
+	//     .setHTML('<p>' + 'Magnitude: ' + feature.properties.magnitude + '</p><p>' + 'Year: ' + feature.properties.year + '</p>' + '<p>' + '</p>')
+	//     .addTo(map);
 	});
 
     document

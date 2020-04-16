@@ -561,9 +561,19 @@ map.on('style.load', function() {
 
 	  var popup = new mapboxgl.Popup({ offset: [0, -15] })
 	    .setLngLat(feature.geometry.coordinates)
-	    .setHTML('<p>' + feature.properties.magnitude + '</p><p>' + feature.properties.year + '</p>')
+	    .setHTML('<p>' + 'Magnitude: ' + feature.properties.magnitude + '</p><p>' + 'Year: ' + feature.properties.year + '</p>')
 	    .addTo(map);
 	});
+
+	geocodingClient.reverseGeocode({
+	  query: [-95.4431142, 33.6875431]
+	})
+	  .send()
+	  .then(response => {
+	    // GeoJSON document with geocoding matches
+	    const match = response.body;
+	});
+
 
     document
 		.getElementById('slider')

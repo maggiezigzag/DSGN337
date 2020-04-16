@@ -558,7 +558,7 @@ map.on('style.load', function() {
     console.log(lat)
     var lng = feature.geometry.coordinates[1];
     var url = "https://api.mapbox.com/geocoding/v5/mapbox.places/" + lat + "," + lng + ".json?access_token=" + mapboxgl.accessToken;
-    $.get(url, function(data){
+    .get(url, function(data){
         var myData = data;
         doAThing(data);
     });

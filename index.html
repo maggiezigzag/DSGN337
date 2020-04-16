@@ -574,11 +574,12 @@ map.on('style.load', function() {
 
     function makeHtml(data) {
         var feature = data.features[0];
+        var name = data.feature.place_name
         console.log(feature)
         // var magnitude = feature.properties.magnitude;
         // var type = feature.properties.depth;
 
-        var formattedHtml = "<strong>" + feature + "</strong><br>";
+        var formattedHtml = "<strong>" + name + "</strong><br>";
         return formattedHtml;
     }
 }

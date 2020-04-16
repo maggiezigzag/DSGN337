@@ -567,8 +567,8 @@ map.on('style.load', function() {
         // Populate the popup and set its coordinates
         // based on the feature found.
         var popup = new mapboxgl.Popup()
-            .setLngLat(feature.geometry.coordinates);
-            .setHTML(makeHtml(data));
+            .setLngLat(feature.geometry.coordinates)
+            .setHTML(makeHtml(data))
             .addTo(map);
     }
 

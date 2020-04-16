@@ -554,14 +554,24 @@ map.on('style.load', function() {
   	});
   	filterBy(0);
 
+
+  	map.on('click', function(e) {
+		var features = map.queryRenderedFeatures(e.point, {
+	    layers: ['earthquake-labels'] // replace this with the name of the layer
+	});
+
+	if (!features.length) {
+		return;
+	}
+
+	var feature = features[0];
+
 	var geocoder = new MapboxGeocoder({
 		accessToken: mapboxgl.accessToken
 	});
 
-	map.addControl(geocoder);
-
 	geocoder.mapboxClient.reverseGeocode({
-		query: [d.properties.latitude, d.properties.longitude]
+		query: [feature.properties.latitude, feature.properties.longitude]
 	})
 	  .send()
 	  .then(response => {
@@ -569,20 +579,9 @@ map.on('style.load', function() {
 	    const match = response.body;
 	});
 
-  	map.on('click', function(e) {
-	  var features = map.queryRenderedFeatures(e.point, {
-	    layers: ['earthquake-labels'] // replace this with the name of the layer
-	  });
-
-	  if (!features.length) {
-	    return;
-	  }
-
-	  var feature = features[0];
-
-	  var popup = new mapboxgl.Popup({ offset: [0, -15] })
+	var popup = new mapboxgl.Popup({ offset: [0, -15] })
 	    .setLngLat(feature.geometry.coordinates)
-	    .setHTML('<p>' + 'Magnitude: ' + feature.properties.magnitude + '</p><p>' + 'Year: ' + feature.properties.year + '</p>')
+	    .setHTML('<p>' + 'Magnitude: ' + feature.properties.magnitude + '</p><p>' + 'Year: ' + feature.properties.year + '</p>' + '<p>' + '</p>')
 	    .addTo(map);
 	});
 

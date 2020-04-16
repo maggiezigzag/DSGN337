@@ -530,27 +530,27 @@ map.on('style.load', function() {
 	    }
 	  	});
 
-  //   map.addLayer({
-		// 'id': 'earthquake-labels',
-		// 'type': 'symbol',
-		// 'source': 'earthquakes',
-		// 'layout': {
-		// 'text-field': ['concat',['to-string', ['get', 'Magnitude']],'ml, ', ['to-string', ['get', 'Depth']], 'm'],
-		// 'text-font': [
-		// 'Open Sans Bold',
-		// 'Arial Unicode MS Bold'
-		// ],
-		// 'text-size': 12
-		// },
-		// 'paint': {
-		// 'text-color': 'rgba(0,0,0,0.5)'
-		// }
-  // 	});
+    map.addLayer({
+		'id': 'earthquake-labels',
+		'type': 'symbol',
+		'source': 'earthquakes',
+		'layout': {
+		'text-field': ['concat',['to-string', ['get', 'Magnitude']],'ml, ', ['to-string', ['get', 'Depth']], 'm'],
+		'text-font': [
+		'Open Sans Bold',
+		'Arial Unicode MS Bold'
+		],
+		'text-size': 12
+		},
+		'paint': {
+		'text-color': 'rgba(0,0,0,0.5)'
+		}
+  	});
   	filterBy(0);
 
   	map.on('click', function(e) {
 	  var features = map.queryRenderedFeatures(e.point, {
-	    layers: ['earthquakes'] // replace this with the name of the layer
+	    layers: ['earthquake-labels'] // replace this with the name of the layer
 	  });
 
 	  if (!features.length) {
@@ -561,7 +561,7 @@ map.on('style.load', function() {
 
 	  var popup = new mapboxgl.Popup({ offset: [0, -15] })
 	    .setLngLat(feature.geometry.coordinates)
-	    .setHTML('<h3>' + feature.properties.title + '</h3><p>' + feature.properties.description + '</p>')
+	    .setHTML('<p>' + feature.properties.magnitude + '</p><p>' + feature.properties.year + '</p>')
 	    .addTo(map);
 	});
 

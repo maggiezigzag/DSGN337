@@ -499,7 +499,7 @@ map.on('style.load', function() {
 				d.properties.depth = d.properties.Depth
 				return d;
 			});
-			
+
 	map.addSource('earthquakes',{
 		'type':'geojson',
 		data: data
@@ -570,7 +570,7 @@ map.on('style.load', function() {
 	});
 
 	geocoder.mapboxClient.reverseGeocode({
-		query: [feature.properties.latitude, feature.properties.longitude]
+		query: feature.geometry.coordinates
 	})
 	  .send()
 	  .then(response => {

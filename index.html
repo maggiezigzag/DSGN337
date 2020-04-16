@@ -556,7 +556,7 @@ map.on('style.load', function() {
 
   	map.on('click', function(e) {
 		var features = map.queryRenderedFeatures(e.point, {
-	    layers: ['earthquake-labels'] // replace this with the name of the layer
+	    layers: ['earthquakes'] // replace this with the name of the layer
 	});
 
 	if (!features.length) {
@@ -569,14 +569,14 @@ map.on('style.load', function() {
 		accessToken: mapboxgl.accessToken
 	});
 
-	geocoder.mapboxClient.reverseGeocode({
-		query: feature.geometry.coordinates
-	})
-	  .send()
-	  .then(response => {
-	    // GeoJSON document with geocoding matches
-	    const match = response.body;
-	});
+	// geocoder.mapboxClient.reverseGeocode({
+	// 	query: feature.geometry.coordinates
+	// })
+	//   .send()
+	//   .then(response => {
+	//     // GeoJSON document with geocoding matches
+	//     const match = response.body;
+	// });
 
 	var popup = new mapboxgl.Popup({ offset: [0, -15] })
 	    .setLngLat(feature.geometry.coordinates)

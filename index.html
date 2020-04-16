@@ -556,7 +556,7 @@ map.on('style.load', function() {
 
   	function getReverseGeocode(feature) {
     var lat = feature.geometry.coordinates[0];
-    console.log(lat)
+    console.log(lat);
     var lng = feature.geometry.coordinates[1];
     var url = "https://api.mapbox.com/geocoding/v5/mapbox.places/" + lat + "," + lng + ".json?access_token=" + mapboxgl.accessToken;
     $.get(url, function(data){
@@ -567,16 +567,16 @@ map.on('style.load', function() {
         // Populate the popup and set its coordinates
         // based on the feature found.
         var popup = new mapboxgl.Popup()
-            .setLngLat(feature.geometry.coordinates)
-            .setHTML(makeHtml(data))
+            .setLngLat(feature.geometry.coordinates);
+            .setHTML(makeHtml(data));
             .addTo(map);
     }
 
     function makeHtml(data) {
-        var feature = data.features[0]
-        console.log(feature)
-        var name = feature.properties.text
-        console.log(data.features.properties.text)
+        var feature = data.features[0];
+        console.log(feature);
+        var name = feature.properties.text;
+        console.log(data.features.properties.text);
         // var magnitude = feature.properties.magnitude;
         // var type = feature.properties.depth;
 

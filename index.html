@@ -358,6 +358,7 @@ ol, ul {
 </div>
 
 <script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.3.0/mapbox-gl-geocoder.min.js'></script>
 
  <script>
 mapboxgl.accessToken = 'pk.eyJ1IjoibWFnZ2llemlnemFnIiwiYSI6ImNrOG5qZWZ4YTB6MXMzc253azA4eHA4MmsifQ.OozXguWjag-EZO4FqwusOA';
@@ -550,6 +551,21 @@ map.on('style.load', function() {
   	});
   	filterBy(0);
 
+	var geocoder = new MapboxGeocoder({
+		accessToken: mapboxgl.accessToken
+	});
+
+	map.addControl(geocoder);
+
+	geocoder.mapboxClient.reverseGeocode({
+		query: d.properties.location
+	})
+	  .send()
+	  .then(response => {
+	    // GeoJSON document with geocoding matches
+	    const match = response.body;
+	});
+
   	map.on('click', function(e) {
 	  var features = map.queryRenderedFeatures(e.point, {
 	    layers: ['earthquake-labels'] // replace this with the name of the layer
@@ -633,7 +649,7 @@ map.on('style.load', function() {
 
 </script>
 
-<script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.3.0/mapbox-gl-geocoder.min.js'></script>
+<!-- <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.3.0/mapbox-gl-geocoder.min.js'></script>
 <script>
 var geocoder = new MapboxGeocoder({
 	accessToken: mapboxgl.accessToken
@@ -649,7 +665,7 @@ geocoder.mapboxClient.reverseGeocode({
 	    // GeoJSON document with geocoding matches
 	    const match = response.body;
 	});
-</script>
+</script> -->
 </body>
 
 

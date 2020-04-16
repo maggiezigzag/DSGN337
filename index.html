@@ -637,6 +637,8 @@ var geocoder = new MapboxGeocoder({
 	accessToken: mapboxgl.accessToken
 });
 
+map.addControl(geocoder);
+
 geocoder.mapboxClient.reverseGeocode({
 	  query: [-95.4431142, 33.6875431]
 	})

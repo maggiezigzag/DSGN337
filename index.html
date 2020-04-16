@@ -575,7 +575,7 @@ map.on('style.load', function() {
     function makeHtml(data) {
         var feature = data.features[0];
         console.log(feature);
-        var name = feature.properties.text;
+        var name = feature.text;
         console.log(feature.text);
         // var magnitude = feature.properties.magnitude;
         // var type = feature.properties.depth;

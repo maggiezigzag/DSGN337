@@ -565,16 +565,6 @@ map.on('style.load', function() {
 	    .addTo(map);
 	});
 
-	geocodingClient.reverseGeocode({
-	  query: [-95.4431142, 33.6875431]
-	})
-	  .send()
-	  .then(response => {
-	    // GeoJSON document with geocoding matches
-	    const match = response.body;
-	});
-
-
     document
 		.getElementById('slider')
 		.addEventListener('input', function(e) {
@@ -640,8 +630,22 @@ map.on('style.load', function() {
 });
 
 </script>
-<!-- <script src='./volcano.geojson'></script>
-<script src='./plates.geojson'></script> -->
+
+<script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.3.0/mapbox-gl-geocoder.min.js'></script>
+<script>
+var geocoder = new MapboxGeocoder({
+	accessToken: mapboxgl.accessToken
+});
+
+geocoder.mapboxClient.geocodeReverse({
+	  query: [-95.4431142, 33.6875431]
+	})
+	  .send()
+	  .then(response => {
+	    // GeoJSON document with geocoding matches
+	    const match = response.body;
+	});
+</script>
 </body>
 
 

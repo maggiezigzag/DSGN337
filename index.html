@@ -494,8 +494,9 @@ map.on('style.load', function() {
 			data.features = data.features.map(function(d){
 				d.properties.year = new Date(d.properties.Date).getYear();
 				d.properties.magnitude = d.properties.Magnitude
-				d.properties.location = d.properties.Location
-				console.log(d.properties.location)
+				d.properties.latitude = d.properties.Latitude
+				d.properties.longitude = d.properties.Longitude
+				console.log(d.properties.latitude)
 				d.properties.depth = d.properties.Depth
 				return d;
 			});
@@ -559,7 +560,7 @@ map.on('style.load', function() {
 	map.addControl(geocoder);
 
 	geocoder.mapboxClient.reverseGeocode({
-		query: d.properties.location
+		query: [d.properties.latitude, d.properties.longitude]
 	})
 	  .send()
 	  .then(response => {

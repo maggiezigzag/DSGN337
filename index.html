@@ -530,27 +530,27 @@ map.on('style.load', function() {
 	    }
 	  	});
 
-    map.addLayer({
-		'id': 'earthquake-labels',
-		'type': 'symbol',
-		'source': 'earthquakes',
-		'layout': {
-		'text-field': ['concat',['to-string', ['get', 'Magnitude']],'ml, ', ['to-string', ['get', 'Depth']], 'm'],
-		'text-font': [
-		'Open Sans Bold',
-		'Arial Unicode MS Bold'
-		],
-		'text-size': 12
-		},
-		'paint': {
-		'text-color': 'rgba(0,0,0,0.5)'
-		}
-  	});
+  //   map.addLayer({
+		// 'id': 'earthquake-labels',
+		// 'type': 'symbol',
+		// 'source': 'earthquakes',
+		// 'layout': {
+		// 'text-field': ['concat',['to-string', ['get', 'Magnitude']],'ml, ', ['to-string', ['get', 'Depth']], 'm'],
+		// 'text-font': [
+		// 'Open Sans Bold',
+		// 'Arial Unicode MS Bold'
+		// ],
+		// 'text-size': 12
+		// },
+		// 'paint': {
+		// 'text-color': 'rgba(0,0,0,0.5)'
+		// }
+  // 	});
   	filterBy(0);
 
   	map.on('click', function(e) {
 	  var features = map.queryRenderedFeatures(e.point, {
-	    layers: ['earthquake-labels'] // replace this with the name of the layer
+	    layers: ['earthquakes'] // replace this with the name of the layer
 	  });
 
 	  if (!features.length) {
